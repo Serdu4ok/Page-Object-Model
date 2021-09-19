@@ -8,7 +8,6 @@ class MainPage(BasePage):
         element = self.is_element_present(*MainPageLocators.LOGIN_LINK), "Login link is not presented"
         assert  element
         self.click(MainPageLocators.LOGIN_LINK)
-        return LoginPage(browser=self.browser, url=self.browser.current_url)
 
     def should_be_login_link(self):
         assert self.is_element_present(*MainPageLocators.LOGIN_LINK), "Login link is not presented"

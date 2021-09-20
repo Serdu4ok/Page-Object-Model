@@ -1,5 +1,8 @@
+import math
+
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.webdriver import WebDriver
+from selenium.common.exceptions import NoAlertPresentException  # в начале файла
 
 
 class BasePage():
@@ -18,8 +21,30 @@ class BasePage():
             return False
         return True
 
+    def convert_to_text(self, how, what):
+        try:
+            element = self.browser.find_element(how, what).text
+        except NoSuchElementException:
+            return False
+        return element
+
     def click(self, locator):
         self.browser.find_element(*locator).click()
 
+    @property
     def find_url(self):
         return self.browser.current_url
+
+    def solve_quiz_and_get_code(self):
+        alert = self.browser.switch_to.alert
+        x = alert.text.split(" ")[2]
+        answer = str(math.log(abs((12 * math.sin(float(x))))))
+        alert.send_keys(answer)
+        alert.accept()
+        try:
+            alert = self.browser.switch_to.alert
+            alert_text = alert.text
+            print(f"Your code: {alert_text}")
+            alert.accept()
+        except NoAlertPresentException:
+            print("No second alert presented")

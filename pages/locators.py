@@ -20,5 +20,6 @@ class ProductPageLocators():
     ADD_TO_BASKET_BTN = (By.CSS_SELECTOR, ".btn.btn-lg.btn-primary.btn-add-to-basket")
     NAME_OF_BOOK = (By.CSS_SELECTOR, ".col-sm-6.product_main h1")
     PRICE_OF_BOOK = (By.CSS_SELECTOR, ".col-sm-6.product_main .price_color")
+    SUCCESS_MSG = (By.XPATH, "//div[@id='messages']//div")
     MSG_PRODUCT_HAS_BEEN_ADD = (By.XPATH, "//div[@id='messages']//strong")
     MSG_VALUE_BASKET = (By.CSS_SELECTOR, ".alert.alert-safe.alert-noicon.alert-info.fade.in strong")

@@ -1,17 +1,19 @@
 import math
+from selenium.webdriver.support import expected_conditions as EC
 
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.common.exceptions import NoAlertPresentException  # в начале файла
+from selenium.webdriver.support.wait import WebDriverWait
 
 
 class BasePage():
     def __init__(self, browser: WebDriver, url, timeout=10):
         self.browser = browser
         self.url = url
-        self.browser.implicitly_wait(timeout)
+        # self.browser.implicitly_wait(timeout)
 
-    def open(self):
+    def open(self) -> object:
         self.browser.get(self.url)
 
     def is_element_present(self, how, what):
@@ -30,6 +32,21 @@ class BasePage():
 
     def click(self, locator):
         self.browser.find_element(*locator).click()
+
+    def is_not_element_present(self, how, what, timeout=4):
+        try:
+            WebDriverWait(self.browser, timeout).until(EC.presence_of_element_located((how, what)))
+        except TimeoutException:
+            return True
+        return False
+
+    def is_disappeared(self, how, what, timeout=4):
+        try:
+            WebDriverWait(self.browser, timeout, 1, TimeoutException). \
+                until_not(EC.presence_of_element_located((how, what)))
+        except TimeoutException:
+            return False
+        return True
 
     @property
     def find_url(self):

@@ -23,3 +23,8 @@ class ProductPageLocators():
     SUCCESS_MSG = (By.XPATH, "//div[@id='messages']//div")
     MSG_PRODUCT_HAS_BEEN_ADD = (By.XPATH, "//div[@id='messages']//strong")
     MSG_VALUE_BASKET = (By.CSS_SELECTOR, ".alert.alert-safe.alert-noicon.alert-info.fade.in strong")
+
+
+class BasePageLocators():
+    LOGIN_LINK = (By.CSS_SELECTOR, "#login_link")
+    LOGIN_LINK_INVALID = (By.CSS_SELECTOR, "#login_link_inc")

@@ -26,6 +26,7 @@ class ProductPage(BasePage):
     def should_not_be_success_message(self):
         assert self.is_not_element_present(*ProductPageLocators.SUCCESS_MSG), \
             "Success message is presented, but should not be"
+        time.sleep(5)
 
     def should_not_be_success_message_disappeared(self):
         assert self.is_disappeared(*ProductPageLocators.SUCCESS_MSG), \

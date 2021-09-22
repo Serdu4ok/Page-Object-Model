@@ -1,3 +1,5 @@
+import time
+
 from .base_page import BasePage
 from .locators import LoginPageLocators
 
@@ -23,3 +25,14 @@ class LoginPage(BasePage):
         assert self.is_element_present(*LoginPageLocators.PASS_CONFIRM_FOR_REGISTRATION), "Pass confirm for " \
                                                                                           "registration is not " \
                                                                                           "presented "
+
+    def register_new_user(self, email, password):
+        assert self.find_and_send_element(*LoginPageLocators.EMAIL_ADRESS_FOR_REGISTRATION, email), "Email doesn't " \
+                                                                                                    "filled "
+        assert self.find_and_send_element(*LoginPageLocators.PASS_FOR_REGISTRATION, password), "PASS doesn't filled"
+        assert self.find_and_send_element(*LoginPageLocators.PASS_CONFIRM_FOR_REGISTRATION, password), "Confirm PASS " \
+                                                                                                       "doesn't filled "
+        self.click(LoginPageLocators.CONFIRM_REGISTRATION_BTN)
+
+
+

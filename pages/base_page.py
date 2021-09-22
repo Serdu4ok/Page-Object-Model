@@ -6,7 +6,7 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.common.exceptions import NoAlertPresentException  # в начале файла
 from selenium.webdriver.support.wait import WebDriverWait
 
-from pages.locators import BasePageLocators
+from pages.locators import BasePageLocators, LoginPageLocators
 
 
 class BasePage():
@@ -25,6 +25,10 @@ class BasePage():
     def go_to_basket(self):
         link = self.browser.find_element(*BasePageLocators.BASKET_LINK)
         link.click()
+
+    def should_be_authorized_user(self):
+        assert self.is_element_present(*BasePageLocators.USER_ICON), "User icon is not presented," \
+                                                                     " probably unauthorised user"
 
     def open(self) -> object:
         self.browser.get(self.url)
@@ -59,6 +63,11 @@ class BasePage():
                 until_not(EC.presence_of_element_located((how, what)))
         except TimeoutException:
             return False
+        return True
+
+    def find_and_send_element(self, how, what, value):
+        element = self.browser.find_element(how, what)
+        element.send_keys(value)
         return True
 
     @property

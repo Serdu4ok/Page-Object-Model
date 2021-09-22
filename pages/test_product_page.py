@@ -1,32 +1,57 @@
-import time
+import pytest
 
-from .base_page import BasePage
-from .locators import ProductPageLocators
+from pages.basket_page import BasketPage
+from pages.generate_data import GenerateData
+from pages.login_page import LoginPage
+from pages.product_page import ProductPage
 
 
-class ProductPage(BasePage):
-    def should_be_add_product_to_basket(self):
-        # Find name and price of book
-        name_of_book = self.convert_to_text(*ProductPageLocators.NAME_OF_BOOK)
-        price_of_book = self.convert_to_text(*ProductPageLocators.PRICE_OF_BOOK)
+@pytest.mark.parametrize('link', GenerateData.generate_link_for_product(10, *[7]))
+def test_guest_can_add_product_to_basket(browser, link):
+    # link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=newYear2019"
+    page = ProductPage(browser, link)
+    page.open()
+    page.should_be_add_product_to_basket()
 
-        assert self.is_element_present(*ProductPageLocators.ADD_TO_BASKET_BTN), "Add to basket btn is absent"
-        self.click(ProductPageLocators.ADD_TO_BASKET_BTN)
-        self.solve_quiz_and_get_code()
 
-        # find msg after click on add to basket btn
-        msg_name_of_book = self.convert_to_text(*ProductPageLocators.MSG_PRODUCT_HAS_BEEN_ADD)
-        msg_price_of_book = self.convert_to_text(*ProductPageLocators.MSG_VALUE_BASKET)
+@pytest.mark.parametrize('link', GenerateData.generate_link_for_product(10, *range(10)))
+def test_guest_cant_see_success_message_after_adding_product_to_basket(browser, link):
+    page = ProductPage(browser, link)
+    page.open()
+    page.should_be_add_product_to_basket()
+    page.should_not_be_success_message()
 
-        # time.sleep(10000)
 
-        assert name_of_book == msg_name_of_book, "Name of book incorrect after add to basket"
-        assert price_of_book == msg_price_of_book, "Price of book incorrect after add to basket"
+@pytest.mark.parametrize('link', GenerateData.generate_link_for_product(10, *range(10)))
+def test_message_disappeared_after_adding_product_to_basket(browser, link):
+    page = ProductPage(browser, link)
+    page.open()
+    page.should_be_add_product_to_basket()
+    page.should_not_be_success_message_disappeared()
 
-    def should_not_be_success_message(self):
-        assert self.is_not_element_present(*ProductPageLocators.SUCCESS_MSG), \
-            "Success message is presented, but should not be"
 
-    def should_not_be_success_message_disappeared(self):
-        assert self.is_disappeared(*ProductPageLocators.SUCCESS_MSG), \
-            "Success message is presented, but should be disappeared"
+def test_guest_should_see_login_link_on_product_page(browser):
+    link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
+    page = ProductPage(browser, link)
+    page.open()
+    page.should_be_login_link()
+
+
+def test_guest_can_go_to_login_page_from_product_page(browser):
+    link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
+    page = ProductPage(browser,link)
+    page.open()
+    page.go_to_login_page()
+    login_page = LoginPage(browser, browser.current_url)
+    login_page.should_be_login_page()
+
+
+@pytest.mark.parametrize('link', GenerateData.generate_link_for_product(1))
+def test_guest_cant_see_product_in_basket_opened_from_product_page(browser, link):
+    page = ProductPage(browser, link)
+    page.open()
+    page.go_to_basket()
+    basket_page = BasketPage(browser, browser.current_url)
+    basket_page.basket_is_empty()
+    basket_page.msg_basket_is_empty()
+

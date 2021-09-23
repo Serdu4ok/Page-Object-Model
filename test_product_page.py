@@ -71,6 +71,7 @@ class TestUserAddToBasketFromProductPage():
         page.register_new_user(email, 'test193PASS')
         page.should_be_authorized_user()
 
+    @pytest.mark.xfail
     def test_user_cant_see_success_message_after_adding_product_to_basket(self, browser):
         link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=newYear2019"
         page = ProductPage(browser, link)

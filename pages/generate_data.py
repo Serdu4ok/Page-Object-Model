@@ -1,7 +1,7 @@
 import pytest
 
 
-class GenerateData():
+class GenerateData:
     @staticmethod
     def generate_link_for_product(number_of_page, *array_of_xfail):
         link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer"

@@ -18,8 +18,6 @@ class ProductPage(BasePage):
         msg_name_of_book = self.convert_to_text(*ProductPageLocators.MSG_PRODUCT_HAS_BEEN_ADD)
         msg_price_of_book = self.convert_to_text(*ProductPageLocators.MSG_VALUE_BASKET)
 
-        # time.sleep(10000)
-
         assert name_of_book == msg_name_of_book, "Name of book incorrect after add to basket"
         assert price_of_book == msg_price_of_book, "Price of book incorrect after add to basket"
 
